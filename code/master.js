@@ -85,7 +85,7 @@ $(document).ready(function() {
               let temp = "";
               for (let i = 0; i < compressed.length; ++i) {
                 temp += compressed[i];
-                let size = 512;
+                let size = 80;
                 if ((new TextEncoder().encode(temp)).length >= size || ((i + 1) >= compressed.length)) {
                   fileToSend.push(temp);
                   temp = '';
