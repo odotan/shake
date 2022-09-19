@@ -26,7 +26,7 @@
         <select id="sourceSelect" style="width:100px;"></select>
         <br />
         <button type="button" id="start" style="margin-top:5px">Start</button>
-        <video id="video" style="position: absolute;top: -10px;right: 10px;bottom: 0;margin: auto;background: whitesmoke;height: 90%; width:100px;border-radius: 10px;">
+        <video id="video" style="position: absolute;top: -10px;right: 10px;bottom: 0;margin: auto;height: 90%; width:100px;border-radius: 10px;z-index: 1; opacity:0.1;">
         </video>
       </fieldset>
 
@@ -39,19 +39,33 @@
         <div op="send" style="display:none;">
           <div class="feedback">Waiting for the <code>Ready</code> QR code.</div>
           <div class="qr_area" style="margin-top:15px;">
-            <img id="qr_send" style="background:whitesmoke;"/>
+            <img id="qr_send" style="background:whitesmoke; position:absolute; inset:0; margin:auto;" />
           </div>
         </div>
         <div op="recieve" style="display:none;">
           <div class="feedback">Waiting for reading <code>Ready</code> QR code.</div>
           <div class="qr_area" style="margin-top:15px;">
-            <img id="qr_recieve" style="background:whitesmoke;"/>
+            <img id="qr_recieve" style="background:whitesmoke; position:absolute; inset:0; margin:auto;" />
           </div>
         </div>
       </fieldset>
     </center>
     <div class="result" style="position: absolute;inset: 0;margin: auto;background: rgb(245 245 245 / 50%);" hidden>
-      <img src="" id="result" style="position: absolute;inset: 0;margin: auto;max-width: 90%;" onclick="$('#download').click()">
+      <img src="" id="result" style="position: absolute;inset: 0;margin: auto;max-width: 90%;">
     </div>
+
+    <style media="screen">
+      fieldset[operation].full {
+        top: 0 !important;
+        bottom: 0 !important;
+        right: 0 !important;
+        left: 0 !important;
+        margin: auto !important;
+        height: calc(100% - 20px) !important;
+        background: white !important;
+        box-shadow: 0px 0px 0px 20px white;
+      }
+    </style>
+
   </body>
 </html>
