@@ -14,7 +14,6 @@ var codeReader = new ZXing.BrowserQRCodeReader(),
   fileToSend = [];
 
 $(document).ready(function() {
-
   codeReader.getVideoInputDevices()
     .then((videoInputDevices) => {
 
@@ -43,68 +42,80 @@ $(document).ready(function() {
 
 });
 
-$(document).ready(function() {
+$(document).on('update_size', function() {
 
   let dim = ($('fieldset[operation]').width() < $('fieldset[operation]').height()) ? $('fieldset[operation]').width() : $('fieldset[operation]').height();
-  dim = parseInt(dim - (dim * 0.05));
+  dim = parseInt(dim - (dim * 0.1));
+  if (!navigator.userAgentData.mobile) {
+    dim = dim * 0.7;
+  }
   QRSize = dim;
   $('#qr_area').add('#qr').css({
     'width': `${dim}px`,
     'height': `${dim}px`
   });
-
+  if (QRGenerator != null) {
+    QRGenerator.size = QRSize
+  }
 });
 
 $(document).ready(function() {
+  $(document).trigger('update_size');
 
   $('#start').click(function() {
 
     let send = $('#send').prop('checked');
     let _operation = $('fieldset[operation]');
     let op_name = $(_operation.find('span')[0]);
-    if (send) {
 
-      operation = "send";
-      op_name.text('Send');
-      $('div[op]').hide();
-      $('div[op="send"]').show();
-      if (!send.ready) {
+    $('fieldset[operation]').addClass('full');
+    $(document).trigger('update_size');
 
-        let compressed = LZString.compressToEncodedURIComponent(LENNA);
-        let temp = "";
-        for (let i = 0; i < compressed.length; ++i) {
-          temp += compressed[i];
-          let size = 1024;
-          if ((new TextEncoder().encode(temp)).length >= size || ((i + 1) >= compressed.length)) {
-            fileToSend.push(temp);
-            temp = '';
+    setTimeout(function () {
+
+          if (send) {
+
+            operation = "send";
+            op_name.text('Send');
+            $('div[op]').hide();
+            $('div[op="send"]').show();
+            if (!send.ready) {
+
+              let compressed = LZString.compressToEncodedURIComponent(LENNA);
+              let temp = "";
+              for (let i = 0; i < compressed.length; ++i) {
+                temp += compressed[i];
+                let size = 512;
+                if ((new TextEncoder().encode(temp)).length >= size || ((i + 1) >= compressed.length)) {
+                  fileToSend.push(temp);
+                  temp = '';
+                }
+              }
+              $('div[op="send"] div.feedback').html(`Waiting for the <code>Ready</code> QR code.`);
+              decodeContinuously();
+
+            }
+            return;
+
           }
-        }
-        $('div[op="send"] div.feedback').html(`Waiting for the <code>Ready</code> QR code.`);
-        decodeContinuously();
 
-      }
-      return;
+          // Recieve
+          op_name.text('Recieve');
+          $('div[op]').hide();
+          $('div[op="recieve"]').show();
+          operation = "recieve";
 
-    }
-
-    // Recieve
-    op_name.text('Recieve');
-    $('div[op]').hide();
-    $('div[op="recieve"]').show();
-    operation = "recieve";
-
-    $('div[op="recieve"] div.feedback').html(`Waiting for reading <code>Ready</code> QR code.`);
-    if (QRGenerator == null) {
-      QRGenerator = new QRious({
-        element: $('#qr_recieve')[0],
-        level: 'L',
-        size: QRSize,
-        value: "Ready"
-      });
-    }
-    decodeContinuously();
-
+          $('div[op="recieve"] div.feedback').html(`Waiting for reading <code>Ready</code> QR code.`);
+          if (QRGenerator == null) {
+            QRGenerator = new QRious({
+              element: $('#qr_recieve')[0],
+              level: 'L',
+              size: QRSize,
+              value: "Ready"
+            });
+          }
+          decodeContinuously();
+    }, 100);
   });
 
 });
