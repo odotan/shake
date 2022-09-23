@@ -28,8 +28,6 @@
       <select id="sourceSelect" style="width:100px;"></select>
       <br />
       <button type="button" id="start" style="margin-top:5px">Start</button>
-      <video id="video" style="position: absolute;top: -10px;right: 10px;bottom: 0;margin: auto;height: 90%; width:100px;border-radius: 10px;z-index: 1; opacity:0.1;">
-      </video>
     </fieldset>
 
     <br />
@@ -55,6 +53,10 @@
   <div class="result" style="position: absolute;inset: 0;margin: auto;background: rgb(245 245 245 / 50%);" hidden>
     <img src="" id="result" style="position: absolute;inset: 0;margin: auto;max-width: 90%;">
   </div>
+
+  <video id="video" style="position: fixed;z-index: 1; opacity:0.5;bottom: 20px;right: 20px;margin: auto;height: 18%;width: auto;opacity:0.9;">
+  </video>
+
   <style media="screen">
     fieldset[operation].full {
       top: 0 !important;

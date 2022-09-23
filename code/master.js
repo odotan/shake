@@ -21,14 +21,23 @@ $(document).ready(function() {
       selectedDeviceId = videoInputDevices[0].deviceId;
       if (videoInputDevices.length >= 1) {
 
-        videoInputDevices.forEach((element) => {
-
+        if (videoInputDevices.length == 1) {
           const sourceOption = document.createElement('option');
-          sourceOption.text = element.label;
-          sourceOption.value = element.deviceId;
+          sourceOption.text = "Front camera";
+          sourceOption.value = "";
           sourceSelect.appendChild(sourceOption);
+          selectedDeviceId = undefined;
+        } else {
+          videoInputDevices.forEach((element) => {
 
-        });
+            const sourceOption = document.createElement('option');
+            sourceOption.text = element.label;
+            sourceOption.value = element.deviceId;
+            sourceSelect.appendChild(sourceOption);
+
+          });
+        }
+
         sourceSelect.onchange = () => {
           selectedDeviceId = sourceSelect.value;
         };
@@ -50,7 +59,9 @@ $(document).on('update_size', function() {
     if (!navigator.userAgentData.mobile) {
       dim = dim * 0.7;
     }
-  } catch (e) {}
+  } catch (e) {
+
+  }
   QRSize = dim;
   $('#qr_area').add('#qr').css({
     'width': `${dim}px`,
