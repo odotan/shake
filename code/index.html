@@ -37,21 +37,21 @@
         <b>Operation: <span>Not started</span></b>
       </legend>
       <div op="send" style="display:none;">
-        <div class="feedback">Waiting for the <code>Ready</code> QR code.</div>
         <div class="qr_area" style="margin-top:15px;">
-          <img id="qr_send" style="background:whitesmoke; position:absolute; inset:0; margin:auto;" />
+          <img id="qr_send" style="background:whitesmoke; position:absolute; top:0;right:0;left:0; margin:auto;" />
         </div>
+        <div class="feedback">Waiting for the <code>Ready</code> QR code.</div>
       </div>
       <div op="recieve" style="display:none;">
-        <div class="feedback">Waiting for reading <code>Ready</code> QR code.</div>
         <div class="qr_area" style="margin-top:15px;">
-          <img id="qr_recieve" style="background:whitesmoke; position:absolute; inset:0; margin:auto;" />
+          <img id="qr_recieve" style="background:whitesmoke; position:absolute; top:0;right:0;left:0; margin:auto;" />
         </div>
+        <div class="feedback">Waiting for reading <code>Ready</code> QR code.</div>
       </div>
     </fieldset>
   </center>
   <div class="result" style="position: absolute;inset: 0;margin: auto;background: rgb(245 245 245 / 50%);" hidden>
-    <img src="" id="result" style="position: absolute;inset: 0;margin: auto;max-width: 90%;">
+    <img src="" id="result" style="position: absolute;top:0;right:0;left:0;margin: auto;max-width: 90%;">
   </div>
 
   <video id="video" style="position: fixed;z-index: 1; opacity:0.5;bottom: 20px;right: 20px;margin: auto;height: 18%;width: auto;opacity:0.9;">

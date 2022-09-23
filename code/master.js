@@ -1,60 +1,52 @@
 var codeReader = new ZXing.BrowserQRCodeReader(),
   selectedDeviceId = null,
-  QRSize = 0,
-  QRGenerator = null,
-  operation = "unknown",
-  send = {
+  QRSize           = 0,
+  QRGenerator      = null,
+  operation        = "unknown",
+  send             = {
     ready: false,
     index: 0
   },
   recieve = {
     index: 1,
-    data: []
+    data:  []
   },
   fileToSend = [];
 
 $(document).ready(function() {
   codeReader.getVideoInputDevices()
     .then((videoInputDevices) => {
-
-      const sourceSelect = document.getElementById('sourceSelect');
-      selectedDeviceId = videoInputDevices[0].deviceId;
+      const sourceSelect            = document.getElementById('sourceSelect');
+      selectedDeviceId              = videoInputDevices[0].deviceId;
       if (videoInputDevices.length >= 1) {
-
         if (videoInputDevices.length == 1) {
           const sourceOption = document.createElement('option');
-          sourceOption.text = "Front camera";
+          sourceOption.text  = "Front camera";
           sourceOption.value = "";
           sourceSelect.appendChild(sourceOption);
           selectedDeviceId = undefined;
         } else {
           videoInputDevices.forEach((element) => {
-
             const sourceOption = document.createElement('option');
-            sourceOption.text = element.label;
+            sourceOption.text  = element.label;
             sourceOption.value = element.deviceId;
             sourceSelect.appendChild(sourceOption);
-
           });
         }
-
         sourceSelect.onchange = () => {
           selectedDeviceId = sourceSelect.value;
         };
-
       }
-
     })
     .catch((err) => {
       console.error(err);
     });
-
 });
 
 $(document).on('update_size', function() {
-
   let dim = ($('fieldset[operation]').width() < $('fieldset[operation]').height()) ? $('fieldset[operation]').width() : $('fieldset[operation]').height();
-  dim = parseInt(dim - (dim * 0.1));
+  QRSize  = dim;
+  dim     = parseInt(dim - (dim * 0.01));
   try {
     if (!navigator.userAgentData.mobile) {
       dim = dim * 0.7;
@@ -62,9 +54,8 @@ $(document).on('update_size', function() {
   } catch (e) {
 
   }
-  QRSize = dim;
-  $('#qr_area').add('#qr').css({
-    'width': `${dim}px`,
+  $('div.qr_area').add('div.qr_area img').css({
+    'width':  `${dim}px`,
     'height': `${dim}px`
   });
   if (QRGenerator != null) {
@@ -74,29 +65,22 @@ $(document).on('update_size', function() {
 
 $(document).ready(function() {
   $(document).trigger('update_size');
-
   $('#start').click(function() {
-
-    let send = $('#send').prop('checked');
+    let send       = $('#send').prop('checked');
     let _operation = $('fieldset[operation]');
-    let op_name = $(_operation.find('span')[0]);
-
+    let op_name    = $(_operation.find('span')[0]);
     $('fieldset[operation]').addClass('full');
     $(document).trigger('update_size');
-
     setTimeout(function() {
-
       if (send) {
-
         operation = "send";
         op_name.text('Send');
         $('div[op]').hide();
         $('div[op="send"]').show();
         if (!send.ready) {
-
           let compressed = LZString.compressToEncodedURIComponent(LENNA);
-          let temp = "";
-          for (let i = 0; i < compressed.length; ++i) {
+          let temp       = "";
+          for (let i     = 0; i < compressed.length; ++i) {
             temp += compressed[i];
             let size = 80;
             if ((new TextEncoder().encode(temp)).length >= size || ((i + 1) >= compressed.length)) {
@@ -106,33 +90,27 @@ $(document).ready(function() {
           }
           $('div[op="send"] div.feedback').html(`Waiting for the <code>Ready</code> QR code.`);
           decodeContinuously();
-
         }
         return;
-
       }
-
       // Recieve
       op_name.text('Recieve');
       $('div[op]').hide();
       $('div[op="recieve"]').show();
       operation = "recieve";
-
       $('div[op="recieve"] div.feedback').html(`Waiting for reading <code>Ready</code> QR code.`);
       if (QRGenerator == null) {
         QRGenerator = new QRious({
           element: $('#qr_recieve')[0],
-          level: 'L',
-          size: QRSize,
-          value: "Ready"
+          level:   'L',
+          size:    QRSize,
+          value:   "Ready"
         });
       }
       decodeContinuously();
     }, 100);
   });
-
 });
-
 
 function decodeContinuously() {
   codeReader.decodeFromInputVideoDeviceContinuously(selectedDeviceId, 'video', (result, err) => {
@@ -145,9 +123,9 @@ function decodeContinuously() {
         if (QRGenerator == null) {
           QRGenerator = new QRious({
             element: $('#qr_send')[0],
-            level: 'L',
-            size: QRSize,
-            value: "-"
+            level:   'L',
+            size:    QRSize,
+            value:   "-"
           });
         }
         send.ready = true;
@@ -182,7 +160,6 @@ function decodeContinuously() {
           }
         }
       }
-
     }
 
     if (err) {
@@ -217,21 +194,19 @@ function dataToImage(chunks) {
   chunks.forEach((chunk) => {
     data += chunk;
   });
-  data = LZString.decompressFromEncodedURIComponent(data);
+  data      = LZString.decompressFromEncodedURIComponent(data);
   let bytes = data.split(" ");
-  bytes = bytes.filter((byte) => {
+  bytes     = bytes.filter((byte) => {
     return byte.toString().length != 0
   })
-
-  let arr = new Uint8Array(bytes);
-
-  var arrayBufferView = new Uint8Array(arr);
-  var blob = new Blob([arrayBufferView], {
+  let arr             = new Uint8Array(bytes);
+  let arrayBufferView = new Uint8Array(arr);
+  let blob            = new Blob([arrayBufferView], {
     type: "image/jpeg"
   });
-  var urlCreator = window.URL || window.webkitURL;
-  var imageUrl = urlCreator.createObjectURL(blob);
-  var img = document.querySelector("#result");
+  let urlCreator = window.URL || window.webkitURL;
+  let imageUrl = urlCreator.createObjectURL(blob);
+  let img = document.querySelector("#result");
   img.src = imageUrl;
   $('div.result').show();
 }
