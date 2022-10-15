@@ -80,12 +80,17 @@ $(document).ready(function() {
         if (!send.ready) {
           let compressed = LZString.compressToEncodedURIComponent(LENNA);
           let temp       = "";
+          // Throtting; we start with 8B, then increase it (duplication x2) till we reach 1024B
+          let size = 8;
           for (let i     = 0; i < compressed.length; ++i) {
             temp += compressed[i];
-            let size = 80;
             if ((new TextEncoder().encode(temp)).length >= size || ((i + 1) >= compressed.length)) {
               fileToSend.push(temp);
               temp = '';
+              size *= 2;
+              if (size > 1024) {
+                size = 1024;
+              }
             }
           }
           $('div[op="send"] div.feedback').html(`Waiting for the <code>Ready</code> QR code.`);
