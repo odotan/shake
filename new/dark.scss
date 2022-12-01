@@ -1,0 +1,15 @@
+html[data-theme="dark"] {
+  div.section {
+    div.title {
+      img {
+        filter: invert(0);
+
+      }
+      img.back {
+        filter: invert(1);
+      }
+    }
+  }
+
+
+}

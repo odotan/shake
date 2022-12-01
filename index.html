@@ -3,11 +3,14 @@
 
   <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.5.6/css/pico.min.css">
     <script src="code/outsource/jquery-3.6.1.min.js"></script>
     <script src="code/outsource/zxing-0.19.1.min.js" charset="utf-8"></script>
     <script src="code/outsource/qrious.min.js" charset="utf-8"></script>
     <script src="code/outsource/lzstring-1.4.4.js" charset="utf-8"></script>
     <script src="code/lenna.js" charset="utf-8"></script>
+    <script src="code/md5.js" charset="utf-8"></script>
+    <script src="code/globs.js" charset="utf-8"></script>
     <script src="code/master.js" charset="utf-8"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Send and Recieve | POC</title>
@@ -29,8 +32,10 @@
         <br />
         <button type="button" id="start" style="margin-top:5px">Start</button>
       </fieldset>
+
       <br />
-      <fieldset operation style="position: absolute;top: 115px;right: 0;left: 0;margin: auto;height: calc(100% - 135px);">
+
+      <fieldset operation style="position: absolute;top: 250px;right: 0;left: 0;margin: auto;height: calc(100% - 135px);">
         <legend>
           <b>Operation: <span>Not started</span></b>
         </legend>
@@ -51,8 +56,10 @@
     <div class="result" style="position: absolute;inset: 0;margin: auto;background: rgb(245 245 245 / 50%);" hidden>
       <img src="" id="result" style="position: absolute;top:0;right:0;left:0;margin: auto;max-width: 90%;">
     </div>
+
     <video id="video" style="position: fixed;z-index: 1; opacity:0.5;bottom: 20px;right: 20px;margin: auto;height: 18%;width: auto;opacity:0.9;">
     </video>
+
     <style media="screen">
       fieldset[operation].full {
         top: 0 !important;
