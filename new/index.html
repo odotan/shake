@@ -6,12 +6,13 @@
   <link rel="stylesheet" href="outsource/pico.css">
   <link rel="stylesheet" href="style.css">
   <script src="outsource/jquery.js"></script>
-  <script src="outsource/lzstring.js" charset="utf-8"></script>
   <script src="outsource/md5.js" charset="utf-8"></script>
   <script src="outsource/qrious.js" charset="utf-8"></script>
   <script src="outsource/zxing.js" charset="utf-8"></script>
   <script src="outsource/modal.js" charset="utf-8"></script>
-  <script src="globs.js" charset="utf-8"></script>
+  <script src="globs/vars.js" charset="utf-8"></script>
+  <script src="globs/funcs.js" charset="utf-8"></script>
+  <script src="globs/events.js" charset="utf-8"></script>
   <script src="master.js" charset="utf-8"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QR Sending and Receiving App</title>
@@ -69,6 +70,9 @@
         <canvas class="qr"></canvas>
         <footer>Please point the other device to this QR to complete the hand shake.</footer>
       </article>
+
+      <article class="preview">
+      </article>
     </div>
   </div>
 
@@ -84,12 +88,8 @@
         Please select a camera from the list, a simple live preview is provided.
       </p>
       <select>
-        <option value="" disabled selected>Select camera</option>
+        <option value="1000" disabled selected>Select camera</option>
       </select>
-      <center>
-        <video id="video" style="height: 150px;">
-        </video>
-      </center>
       <footer>
         <a href="#done" role="button" data-target="chooseCamera" onClick="toggleModal(event);">
           Done
@@ -98,6 +98,10 @@
     </article>
   </dialog>
 
+  <video id="preview_camera">
+  </video>
+
+  <img id="nightmode" src="imgs/night.svg" alt="" style="transform:rotate(120deg)">
 </body>
 
 </html>

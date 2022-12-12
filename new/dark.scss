@@ -10,6 +10,7 @@ html[data-theme="dark"] {
       }
     }
   }
-
-
+  #nightmode {
+    filter: invert(1);
+  }
 }
