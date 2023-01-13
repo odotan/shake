@@ -17,8 +17,8 @@ let visibleModal = null;
 const toggleModal = event => {
   event.preventDefault();
   const modal = document.getElementById(event.currentTarget.getAttribute('data-target'));
-  (typeof(modal) != 'undefined' && modal != null)
-    && isModalOpen(modal) ? closeModal(modal) : openModal(modal)
+  (typeof(modal) != 'undefined' && modal != null) &&
+  isModalOpen(modal) ? closeModal(modal) : openModal(modal)
 }
 
 // Is modal open

@@ -3,13 +3,14 @@ html[data-theme="dark"] {
     div.title {
       img {
         filter: invert(0);
-
       }
+
       img.back {
         filter: invert(1);
       }
     }
   }
+
   #nightmode {
     filter: invert(1);
   }

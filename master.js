@@ -11,12 +11,12 @@ $(document).ready(function() {
     $('div.section[section="send"]').show()
     $('div.section[section="send"] article.preview').hide().html("")
     $('div.start').hide()
-    count     = -1
-    total     = 0
-    images    = []
+    count = -1
+    total = 0
+    images = []
     send_info = {
       count: 0,
-      size:  0
+      size: 0
     }
     operation = "send"
   })
@@ -70,12 +70,12 @@ $(document).ready(function() {
       $('div.section[section="send"] article.preview').hide().html("")
       $('div.start').hide()
 
-      count     = -1
-      total     = 0
-      images    = []
+      count = -1
+      total = 0
+      images = []
       send_info = {
         count: 0,
-        size:  0
+        size: 0
       }
 
       for (var i = 0; i < files.length; i++) {
@@ -125,15 +125,3 @@ $(document).ready(function() {
     }
   })
 })
-
-
-function formatBytes(bytes, decimals = 0) {
-  if (!+bytes) {
-    return '0B'
-  }
-  const k     = 1024
-  const dm    = decimals < 0 ? 0 : decimals
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))}${sizes[i]}`
-}

@@ -23,6 +23,7 @@ $(window).resize(function() {
 
 // Get the device's camera(s)
 $(document).ready(function() {
+  let count = 0
   codeReader.getVideoInputDevices()
     .then((videoInputDevices) => {
       const sourceSelect = $('dialog#chooseCamera article select')[0]
@@ -33,7 +34,11 @@ $(document).ready(function() {
           sourceOption.text = "Front camera"
           sourceOption.value = ""
           sourceSelect.appendChild(sourceOption)
-          selectedDeviceId = null
+          if (count == 0) {
+            selectedDeviceId = ""
+            sourceOption.selected = true
+            decodeContinuously()
+          }
         } else {
           videoInputDevices.forEach((element) => {
             const sourceOption = document.createElement('option')
@@ -47,15 +52,26 @@ $(document).ready(function() {
           decodeContinuously()
         }
       }
+      ++count
     })
-    .catch((err) => {
-    })
+    .catch((err) => {})
 })
 
 $(document).ready(function() {
-  $('#nightmode').click(function(){
+  $('#nightmode').click(function() {
     let mode = $('html').attr('data-theme')
     let new_mode = (mode == "light") ? "dark" : "light"
     $('html').attr('data-theme', new_mode)
   })
+})
+
+
+$(document).ready(function() {
+  setInterval(function() {
+    if (operation == "receive" && operationStarted) {
+      if (((new Date()).getTime()) - lastAck >= 5000) {
+        QRGenerator.value = `reduce,${latest_md5}`
+      }
+    }
+  }, 1000)
 })

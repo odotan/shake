@@ -1,77 +1,108 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-theme="light">
 
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.5.6/css/pico.min.css">
-    <script src="code/outsource/jquery-3.6.1.min.js"></script>
-    <script src="code/outsource/zxing-0.19.1.min.js" charset="utf-8"></script>
-    <script src="code/outsource/qrious.min.js" charset="utf-8"></script>
-    <script src="code/outsource/lzstring-1.4.4.js" charset="utf-8"></script>
-    <script src="code/lenna.js" charset="utf-8"></script>
-    <script src="code/md5.js" charset="utf-8"></script>
-    <script src="code/globs.js" charset="utf-8"></script>
-    <script src="code/master.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="outsource/pico.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="outsource/jquery.js"></script>
+    <script src="outsource/md5.js" charset="utf-8"></script>
+    <script src="outsource/qrious.js" charset="utf-8"></script>
+    <script src="outsource/zxing.js" charset="utf-8"></script>
+    <script src="outsource/modal.js" charset="utf-8"></script>
+    <script src="outsource/finish_sound.js" charset="utf-8"></script>
+    <script src="globs/vars.js" charset="utf-8"></script>
+    <script src="globs/funcs.js" charset="utf-8"></script>
+    <script src="globs/events.js" charset="utf-8"></script>
+    <script src="master.js" charset="utf-8"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Send and Recieve | POC</title>
+    <title>QR Sending and Receiving App</title>
   </head>
 
-  <body style="position: absolute;inset: 0;margin: 10px;">
-    <center>
-      <fieldset style="height: 83px;line-height: 20px;position: absolute;top: 0;right: 0;left: 0;margin: auto;text-align:left;">
-        <legend>
-          <b>Send, or recieve?</b>
-        </legend>
-        <input type="radio" name="operation" id="send" checked>
-        <label for="send">Send</label>
-        <input type="radio" name="operation" id="recieve">
-        <label for="recieve">Recieve</label>
-        <br />
-        <label for="sourceSelect">Camera: </label>
-        <select id="sourceSelect" style="width:100px;"></select>
-        <br />
-        <button type="button" id="start" style="margin-top:5px">Start</button>
-      </fieldset>
-
-      <br />
-
-      <fieldset operation style="position: absolute;top: 250px;right: 0;left: 0;margin: auto;height: calc(100% - 135px);">
-        <legend>
-          <b>Operation: <span>Not started</span></b>
-        </legend>
-        <div op="send" style="display:none;">
-          <div class="qr_area" style="margin-top:15px;">
-            <img id="qr_send" style="background:whitesmoke; position:absolute; top:0;right:0;left:0; margin:auto;" />
-          </div>
-          <div class="feedback">Waiting for the <code>Ready</code> QR code.</div>
-        </div>
-        <div op="recieve" style="display:none;">
-          <div class="qr_area" style="margin-top:15px;">
-            <img id="qr_recieve" style="background:whitesmoke; position:absolute; top:0;right:0;left:0; margin:auto;" />
-          </div>
-          <div class="feedback">Waiting for reading <code>Ready</code> QR code.</div>
-        </div>
-      </fieldset>
-    </center>
-    <div class="result" style="position: absolute;inset: 0;margin: auto;background: rgb(245 245 245 / 50%);" hidden>
-      <img src="" id="result" style="position: absolute;top:0;right:0;left:0;margin: auto;max-width: 90%;">
+  <body>
+    <div class="welcome">
+      <div class="title">QR Sending and Receiving App</div>
+      <article>
+        <ol style="list-style:decimal;margin:0px;">
+          <li><strong>Choose the prefered camera <a style="padding: 10px;" role="button" href="#" data-target="chooseCamera" onClick="toggleModal(event)">From here</a>.</strong></li>
+          <li>Click one of the buttons below.</li>
+          <li>Open the app on another device and select the other button.</li>
+          <li>Point the two devices face to face, and make one of them upside down.</li>
+        </ol>
+      </article>
+      <div>
+        <button id="send">
+          <img src="imgs/send-receive.svg" alt="" style="transform:rotate(270deg)">
+          Send a file(s)</button>
+      </div>
+      <div>
+        <button class="secondary" id="receive">
+          <img src="imgs/send-receive.svg" alt="">
+          Receive a file(s)</button>
+      </div>
     </div>
 
-    <video id="video" style="position: fixed;z-index: 1; opacity:0.5;bottom: 20px;right: 20px;margin: auto;height: 18%;width: auto;opacity:0.9;">
+    <div class="section" section="send">
+      <div class="sub-content">
+        <div class="button" style="margin: var(--block-spacing-vertical) 0;">
+          <button id="select_files">
+            <img src="imgs/images.svg" alt="">
+            Select an image(s)</button>
+          <input type="file" accept="image/*" multiple id="images" hidden>
+        </div>
+        <article class="preview top">
+        </article>
+
+        <article class="send top">
+          <canvas class="qr"></canvas>
+          <footer>
+            <div>Waiting for the hand shake.</div>
+            <progress max="100"></progress>
+          </footer>
+        </article>
+      </div>
+      <div class="title lower"><img class="back" src="imgs/arrow.svg" alt=""> <span>Operation <sup>(Send <img src="imgs/send-receive.svg" alt="" style="transform:rotate(270deg)">)</sup></span></div>
+    </div>
+
+    <div class="section" section="receive">
+      <div class="sub-content">
+        <article class="receive top">
+          <canvas class="qr"></canvas>
+          <footer>Please point the other device to this QR to complete the hand shake.</footer>
+        </article>
+
+        <article class="preview top">
+        </article>
+      </div>
+      <div class="title lower"><img class="back" src="imgs/arrow.svg" alt=""> <span>Operation <sup>(Receive <img src="imgs/send-receive.svg" alt="">)</sup></span></div>
+    </div>
+
+    <div class="start">
+      <button type="button" id="start">Start the process</button>
+    </div>
+
+
+    <dialog id="chooseCamera">
+      <article>
+        <h3>Choose the camera</h3>
+        <p>
+          Please select a camera from the list, a simple live preview is provided.
+        </p>
+        <select>
+          <option value="1000" disabled selected>Select camera</option>
+        </select>
+        <footer>
+          <a href="#done" role="button" data-target="chooseCamera" onClick="toggleModal(event);">
+            Done
+          </a>
+        </footer>
+      </article>
+    </dialog>
+
+    <video id="preview_camera">
     </video>
 
-    <style media="screen">
-      fieldset[operation].full {
-        top: 0 !important;
-        bottom: 0 !important;
-        right: 0 !important;
-        left: 0 !important;
-        margin: auto !important;
-        height: calc(100% - 20px) !important;
-        background: white !important;
-        box-shadow: 0px 0px 0px 20px white;
-      }
-    </style>
+    <img id="nightmode" src="imgs/night.svg" alt="" style="transform:rotate(120deg)">
   </body>
 
 </html>
