@@ -110,7 +110,7 @@ let decodeContinuously = () => {
               return reduceSize(true)
             }
             // Check if the last ack was 5 seoncds ago
-            if ((new Date()).getTime() - lastAck >= 5000) {
+            if ((new Date()).getTime() - lastAck >= (waitTimeBeforeReduceSize * 1000)) {
               reduceSize()
             }
           }

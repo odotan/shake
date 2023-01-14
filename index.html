@@ -11,6 +11,7 @@
     <script src="outsource/zxing.js" charset="utf-8"></script>
     <script src="outsource/modal.js" charset="utf-8"></script>
     <script src="outsource/finish_sound.js" charset="utf-8"></script>
+    <script src="outsource/compressor.js" charset="utf-8"></script>
     <script src="globs/vars.js" charset="utf-8"></script>
     <script src="globs/funcs.js" charset="utf-8"></script>
     <script src="globs/events.js" charset="utf-8"></script>
@@ -48,6 +49,9 @@
           <button id="select_files">
             <img src="imgs/images.svg" alt="">
             Select an image(s)</button>
+            <div class="imagesQuality">
+             <span>Compress images:</span><input type="range" id="imgQuality" min="10" max="100" step="10" value="10"> <sup>10%</sup>
+            </div>
           <input type="file" accept="image/*" multiple id="images" hidden>
         </div>
         <article class="preview top">

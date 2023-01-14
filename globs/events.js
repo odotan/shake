@@ -9,6 +9,9 @@ $(document).on('updateQRSize', function() {
       dimension = dimension * 0.9
     }
   } catch (e) {} finally {
+    if (operation == "receive") {
+      dimension = dimension * 0.75
+    }
     QRSize = dimension
   }
   if (QRGenerator != null) {
@@ -69,7 +72,7 @@ $(document).ready(function() {
 $(document).ready(function() {
   setInterval(function() {
     if (operation == "receive" && operationStarted) {
-      if (((new Date()).getTime()) - lastAck >= 5000) {
+      if (((new Date()).getTime()) - lastAck >= (waitTimeBeforeReduceSize * 1000)) {
         QRGenerator.value = `reduce,${latest_md5}`
       }
     }

@@ -136,5 +136,30 @@ article.top {
 
 div.title.lower {
   margin-right: 40px;
+  position: fixed;
+  right: 0;
+  left: 0;
+}
+
+div.imagesQuality {
+  text-align: left;
+
+  #imgQuality {
+    width: calc(100% - 250px);
+    position: relative;
+    top: 5px;
+    margin: 0 10px;
+  }
+
+  span {
+    width: 190px;
+    text-align: left;
+  }
+
+  sup {
+    position: relative;
+    top: 2px;
+    width: 40px;
+  }
 }
 @import "dark";

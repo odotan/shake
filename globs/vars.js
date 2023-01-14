@@ -26,10 +26,9 @@ let send_info = {
 let received = "",
   received_reserved = ""
 let progress_bar = null
-
-
 let KeepSize = false
 let lastAck = null
 let numberOfScans = 0
-
 let latestQR = ""
+let ImagesQuality = 10
+let waitTimeBeforeReduceSize = 2 // In seconds

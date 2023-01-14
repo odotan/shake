@@ -60,7 +60,9 @@ $(document).ready(function() {
   $('#select_files').click(function() {
     $('#images').click()
   })
-
+  $('#images').click(function() {
+    $(this).val(null)
+  })
   $('#images').change(function(e) {
     $('#select_files').attr('disabled', '')
     $('#select_files').attr('aria-busy', 'true')
@@ -80,48 +82,66 @@ $(document).ready(function() {
 
       for (var i = 0; i < files.length; i++) {
         let file = files[i]
-        let reader = new FileReader()
 
-        reader.onload = async function(e) {
-          let image = `<img src="${e.target.result}" alt="${file.name}">`
-            ++count
-          total += file.size
-          grid += `<div class="image">
-                      ${image}<br />
-                      <div class="size">
-                        ${formatBytes(file.size)}
-                      </div>
-                   </div>`
-          if ((count % 5 == 0 && count != 0) || count + 1 == files.length) {
-            grid += `</div>`
-            $('div.section[section="send"] article.preview').show().append(grid)
-            grid = `<div class="grid">`
-          }
+        new Compressor(file, {
+          quality: ImagesQuality / 100,
 
-          let image_compresses = e.target.result
-          images.push(image_compresses)
-        }
-        reader.readAsDataURL(file)
+          // The compression process is asynchronous,
+          // which means you have to access the `result` in the `success` hook function.
+          success(result) {
+            let reader = new FileReader()
+
+            reader.onload = async function(e) {
+              let image = `<img src="${e.target.result}" alt="${result.name}">`
+                ++count
+              total += result.size
+              grid += `<div class="image">
+                          ${image}<br />
+                          <div class="size">
+                            ${formatBytes(result.size)}
+                          </div>
+                       </div>`
+              if ((count % 5 == 0 && count != 0) || count + 1 == files.length) {
+                grid += `</div>`
+                $('div.section[section="send"] article.preview').show().append(grid)
+                grid = `<div class="grid">`
+              }
+
+              let image_compresses = e.target.result
+              images.push(image_compresses)
+              if (i == files.length) {
+                images.sort((a, b) => {
+                  return a.length - b.length
+                })
+
+                send_info.count = images.length
+                let size = 0
+                images.forEach((image) => {
+                  size += image.length
+                })
+                send_info.size = size
+                $('div.start').fadeIn()
+              }
+            }
+            reader.readAsDataURL(result)
+
+          },
+          error(err) {
+            console.log(err.message);
+          },
+        });
       }
-
-      setTimeout(async function() {
-        images.sort((a, b) => {
-          return a.length - b.length
-        })
-
-        send_info.count = images.length
-        let size = 0
-        images.forEach((image) => {
-          size += image.length
-        })
-        send_info.size = size
-        $('div.start').fadeIn()
-      }, 500)
     } catch (_e) {} finally {
       setTimeout(function() {
         $('#select_files').removeAttr('disabled')
         $('#select_files').removeAttr('aria-busy')
       }, 100)
     }
+  })
+
+  $('#imgQuality').on('input', function() {
+    let quality = parseInt($(this).val())
+    $('div.imagesQuality sup').text(`${quality}%`)
+    ImagesQuality = quality
   })
 })
