@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bitcoin Key Pair Generator</title>
+  <script>
+    function generateKeyPair() {
+      var bits = 256;
+      var rsa = new RSAKey();
+      rsa.generate(bits, "10001");
+
+      var privateKeyHex = rsa.n.toString(16);
+      var publicKeyHex = rsa.n.toString(16) + '01';
+
+      document.getElementById("privateKey").innerHTML = privateKeyHex;
+      document.getElementById("publicKey").innerHTML = publicKeyHex;
+    }
+  </script>
+</head>
+<body>
+  <h1>Bitcoin Key Pair Generator</h1>
+  <button onclick="generateKeyPair()">Generate Key Pair</button>
+  <h2>Private Key</h2>
+  <p id="privateKey"></p>
+  <h2>Public Key</h2>
+  <p id="publicKey"></p>
+</body>
+</html>
